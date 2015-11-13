@@ -54,12 +54,6 @@
 
     }
 }
-- (IBAction)textFieldReturn:(id)sender
-{
-    [sender resignFirstResponder];
-   [self.mapView removeAnnotations:[self.mapView annotations]];
-   // [self performLocalSearch];
-}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -108,6 +102,7 @@
 #pragma Searchbar delegate methods
 -(void) searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
+    [localSearch cancel];
     MKLocalSearchRequest *searchRequest = [[MKLocalSearchRequest alloc]init];
     searchRequest.naturalLanguageQuery = self.searchBar.text;
     searchRequest.region = self.mapView.region;
@@ -129,6 +124,11 @@
                       NSLog(@"Address == %@", item.placemark);
                       
                    }
+         searchResponse = response;
      }];
+}
+-(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return [searchResponse.mapItems count];
 }
 @end
