@@ -53,6 +53,7 @@
         [[self mapView] setShowsUserLocation:YES];
 
     }
+    _mapResultsTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -126,9 +127,33 @@
                    }
          searchResponse = response;
      }];
+    [_mapResultsTable reloadData];
 }
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return [searchResponse.mapItems count];
 }
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *Identifier = @"SearchResultsCell";
+    UITableViewCell *cell = [self.mapResultsTable dequeueReusableCellWithIdentifier:Identifier];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:Identifier];
+    }
+    
+    MKMapItem *item = searchResponse.mapItems[indexPath.row];
+    
+    cell.textLabel.text = item.name;
+    
+    return cell;
+}
+//-(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    [self.searchDisplayController setActive:NO animated:YES];
+//    MKMapItem *item = searchResponse.mapItems[indexPath.row];
+//    [self.mapView addAnnotation:item.placemark];
+//    [self.mapView selectAnnotation:item.placemark animated:YES];
+//    [self.mapView setCenterCoordinate:item.placemark.location.coordinate animated:YES];
+//    [self.mapView setUserTrackingMode:MKUserTrackingModeNone];
+//}
 @end
