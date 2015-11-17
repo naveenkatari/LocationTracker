@@ -4,16 +4,16 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Fetch Location Controller-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
-                <viewController id="vXZ-lx-hvc" customClass="ViewController" sceneMemberID="viewController">
+                <viewController id="vXZ-lx-hvc" customClass="FetchLocationController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="jyV-Pf-zRb"/>
                         <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="500"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="dUL-vX-OV2">
@@ -39,7 +39,7 @@
                                 <rect key="frame" x="16" y="374" width="333" height="218"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SearchResultsCell" id="3sX-5p-JXh">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="LocationDetailsCell" id="3sX-5p-JXh" customClass="LocationDetailsViewCell">
                                         <rect key="frame" x="0.0" y="0.0" width="333" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="3sX-5p-JXh" id="kxV-O9-cY4">
@@ -55,12 +55,12 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="375" height="500"/>
                     <connections>
-                        <outlet property="countryLabel" destination="IDM-eV-sUZ" id="t52-xT-NGh"/>
-                        <outlet property="mapResultsTable" destination="Tam-Wp-1D0" id="ttB-BK-hh2"/>
-                        <outlet property="mapView" destination="dUL-vX-OV2" id="5Cb-IV-ioy"/>
-                        <outlet property="searchBar" destination="zum-jM-4xB" id="eS2-Id-r0Z"/>
-                        <outlet property="stateLabel" destination="6z7-oL-IhQ" id="IRW-fH-xVs"/>
+                        <outlet property="mapResultsTable" destination="Tam-Wp-1D0" id="PpJ-Wb-bX5"/>
+                        <outlet property="mapView" destination="dUL-vX-OV2" id="SNK-0c-hTk"/>
+                        <outlet property="searchBar" destination="zum-jM-4xB" id="vIc-ak-dKQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>

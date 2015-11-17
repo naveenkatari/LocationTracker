@@ -1,39 +1,41 @@
 //
-//  ViewController.m
+//  FetchLocationController.m
 //  LocationTracker
 //
-//  Created by Naveen Katari on 03/11/15.
+//  Created by Naveen Katari on 17/11/15.
 //  Copyright (c) 2015 Sourcebits. All rights reserved.
 //
 
-#import "ViewController.h"
+#import "FetchLocationController.h"
 #define METERS_PER_MILE 1609.344
 
-@interface ViewController () <UISearchBarDelegate, UISearchDisplayDelegate>
+@interface FetchLocationController ()<UISearchBarDelegate, UISearchDisplayDelegate>
 {
     NSMutableArray *matchingSearchResults;
     CLPlacemark *locationPlacemark;
     CLGeocoder *geoCoder;
     MKLocalSearch *localSearch;
     MKLocalSearchResponse *searchResponse;
-
+    NSInteger selectedIndex;
+    MKMapItem *item;
 }
 
 @end
 
-@implementation ViewController
+@implementation FetchLocationController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [_mapResultsTable registerNib:[UINib nibWithNibName:@"LocationDetailsViewCell" bundle:nil] forCellReuseIdentifier:@"LocationDetailsCell"];
     self.searchBar.delegate = self;
-        geoCoder = [[CLGeocoder alloc]init];
+    geoCoder = [[CLGeocoder alloc]init];
     if (_locationManager == nil)
     {
         _locationManager = [[CLLocationManager alloc]init];
         
         [_locationManager setDesiredAccuracy:kCLLocationAccuracyNearestTenMeters];
-         [[self locationManager] setDelegate:self];
+        [[self locationManager] setDelegate:self];
         
     }
     if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)])
@@ -43,7 +45,7 @@
     }
     [_locationManager startUpdatingLocation];
     [[self mapView] setShowsUserLocation:YES];
-
+    
     
     CLAuthorizationStatus authorizationStatus = [CLLocationManager authorizationStatus];
     if( authorizationStatus == kCLAuthorizationStatusAuthorizedAlways )
@@ -51,7 +53,7 @@
     {
         [_locationManager startUpdatingLocation];
         [[self mapView] setShowsUserLocation:YES];
-
+        
     }
     _mapResultsTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 }
@@ -62,7 +64,7 @@
 }
 -(void) viewWillAppear:(BOOL)animated
 {
-   
+    
 }
 #pragma mark - CLLocationManager Delegate methods
 
@@ -76,8 +78,6 @@
          {
              
              locationPlacemark = [placemarks lastObject];
-             self.stateLabel.text = locationPlacemark.administrativeArea;
-             self.countryLabel.text = locationPlacemark.country;
          }
          else
          {
@@ -86,7 +86,7 @@
      }];
     CLLocationCoordinate2D zoomLocation;
     zoomLocation=location.coordinate;
-
+    
     MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(zoomLocation, 0.5*METERS_PER_MILE, 0.5*METERS_PER_MILE);
     [self.mapView setRegion:viewRegion animated:YES];
     [manager stopUpdatingLocation];
@@ -118,42 +118,34 @@
              NSLog(@"No Matches Found");
          }
          else
-             for (MKMapItem *item in response.mapItems)
-                  {
-                      NSLog(@"name == %@", item.name);
-                      NSLog(@"Phone == %@", item.phoneNumber);
-                      NSLog(@"Address == %@", item.placemark);
-                      
-                   }
+             for (item in response.mapItems)
+             {
+                 NSLog(@"name == %@", item.name);
+                 NSLog(@"Phone == %@", item.phoneNumber);
+                 NSLog(@"Address == %@", item.placemark);
+                 
+             }
          searchResponse = response;
+         locationPlacemark = item.placemark;
+         [_mapResultsTable reloadData];
      }];
-    [_mapResultsTable reloadData];
 }
+#pragma Tableview delegate methods
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return [searchResponse.mapItems count];
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *Identifier = @"SearchResultsCell";
-    UITableViewCell *cell = [self.mapResultsTable dequeueReusableCellWithIdentifier:Identifier];
+    static NSString *Identifier = @"LocationDetailsCell";
+    LocationDetailsViewCell *cell = [self.mapResultsTable dequeueReusableCellWithIdentifier:Identifier];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:Identifier];
+        cell = [[LocationDetailsViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:Identifier];
     }
     
-    MKMapItem *item = searchResponse.mapItems[indexPath.row];
+        item = searchResponse.mapItems[indexPath.row];
     
-    cell.textLabel.text = item.name;
-    
+    cell.locationNameLabel.text = item.name;
     return cell;
 }
-//-(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    [self.searchDisplayController setActive:NO animated:YES];
-//    MKMapItem *item = searchResponse.mapItems[indexPath.row];
-//    [self.mapView addAnnotation:item.placemark];
-//    [self.mapView selectAnnotation:item.placemark animated:YES];
-//    [self.mapView setCenterCoordinate:item.placemark.location.coordinate animated:YES];
-//    [self.mapView setUserTrackingMode:MKUserTrackingModeNone];
-//}
 @end
