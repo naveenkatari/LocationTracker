@@ -120,14 +120,14 @@
          else
              for (item in response.mapItems)
              {
-                 NSLog(@"name == %@", item.name);
-                 NSLog(@"Phone == %@", item.phoneNumber);
-                 NSLog(@"Address == %@", item.placemark);
-                 MKPointAnnotation *annotation = [[MKPointAnnotation alloc]init];
-                 annotation.coordinate = item.placemark.coordinate;
-                 annotation.title = item.name;
-                 annotation.subtitle = item.placemark.title;
-                 [self.mapView addAnnotation:annotation];
+                NSLog(@"name == %@", item.name);
+                NSLog(@"Phone == %@", item.phoneNumber);
+                NSLog(@"Address == %@", item.placemark);
+                MKPointAnnotation *annotation = [[MKPointAnnotation alloc]init];
+                annotation.coordinate = item.placemark.coordinate;
+               annotation.title = item.name;
+               annotation.subtitle = item.placemark.title;
+               [self.mapView addAnnotation:annotation];
              }
          searchResponse = response;
          locationPlacemark = item.placemark;
